@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shoe Shoukins Admin</title>
+<style>
+body{font-family:Arial;margin:0;background:#fff6fb;color:#222}.wrap{max-width:900px;margin:auto;padding:25px}.top{display:flex;justify-content:space-between;align-items:center}.top a{color:#ec4f9b;font-weight:bold}.panel,.item{background:white;padding:20px;border-radius:16px;margin:18px 0;box-shadow:0 5px 20px #00000010}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0 12px}button{border:0;padding:12px 17px;border-radius:10px;background:#ec4f9b;color:#fff;font-weight:bold;cursor:pointer}.danger{background:#222}.item{display:flex;justify-content:space-between;gap:15px;align-items:center}.muted{color:#777}@media(max-width:650px){.grid{grid-template-columns:1fr}.item{display:block}}
+</style></head>
+<body><div class="wrap">
+<div class="top"><h1>👟 Shoe Shoukins Admin</h1><a href="index.html">View Website</a></div>
+<div class="panel"><h2>Add Product</h2><div class="grid"><div><label>Product name</label><input id="name" placeholder="e.g. Air Casual Sneaker"></div><div><label>Price (₹)</label><input id="price" type="number" placeholder="1299"></div></div><label>Description</label><textarea id="desc" placeholder="Short product description"></textarea><label>Image URL (optional)</label><input id="image" placeholder="https://..."><button onclick="add()">Add Product</button></div>
+<div class="panel"><h2>Products</h2><div id="list"></div></div>
+<div class="panel"><button class="danger" onclick="resetAll()">Reset to Demo Products</button><p class="muted">Important: this simple admin stores changes in this browser only. For public, permanent product management, a database/admin hosting setup is needed.</p></div>
+</div>
+<script>
+const key="shoeShoukinsProducts", defaults=[{name:"Classic White Sneakers",price:"999",desc:"Clean everyday style",image:""},{name:"Premium Casual Shoes",price:"1299",desc:"Smart & comfortable",image:""},{name:"Street Style Sneakers",price:"1499",desc:"Bold urban vibes",image:""}];
+function get(){try{return JSON.parse(localStorage.getItem(key))||defaults}catch(e){return defaults}}
+function save(x){localStorage.setItem(key,JSON.stringify(x));render()}
+function add(){let n=name.value.trim(),p=price.value.trim();if(!n||!p)return alert("Product name aur price bharna zaroori hai.");let x=get();x.push({name:n,price:p,desc:desc.value.trim(),image:image.value.trim()});save(x);name.value=price.value=desc.value=image.value=""}
+function del(i){let x=get();x.splice(i,1);save(x)}
+function render(){list.innerHTML="";get().forEach((p,i)=>list.innerHTML+=`<div class="item"><div><b>${p.name}</b><br>₹${p.price}<br><span class="muted">${p.desc||""}</span></div><button class="danger" onclick="del(${i})">Delete</button></div>`)}
+function resetAll(){if(confirm("Demo products restore karein?"))save(defaults)}
+render();
+</script></body></html>
